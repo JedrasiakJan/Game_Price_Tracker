@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: steam_api_db
+    environment:
+      # Dane administratora bazy - Docker użyje ich do zainicjowania bazy
+      POSTGRES_USER: steam_admin
+      POSTGRES_PASSWORD: steam_secure_password123
+      POSTGRES_DB: steam_api_prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - steam_api_postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  # Wolumen też nazywamy pod projekt, żebyś na dysku wiedział, co jest czym
+  steam_api_postgres_data:

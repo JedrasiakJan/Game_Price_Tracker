@@ -1,0 +1,33 @@
+# --- Środowisko i Tajne Dane (NAJWAŻNIEJSZE) ---
+.env
+*.env
+auth.json
+
+# --- Kompilaty i pliki wykonywalne Go ---
+# Wykluczamy pliki binarne, które tworzy kompilator
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+# Wykluczamy skompilowaną aplikację (jeśli nazwiesz ją 'app' lub 'main')
+app
+main
+
+# --- Narzędzia deweloperskie / IDE ---
+# Cursor / VS Code
+.vscode/
+*.code-workspace
+.history/
+
+# JetBrains (jeśli kiedyś użyjesz GoLand)
+.idea/
+
+# --- Systemowe ---
+.DS_Store
+Thumbs.db
+
+# --- Logi ---
+*.log
