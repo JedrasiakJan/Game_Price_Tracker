@@ -12,6 +12,27 @@ W przeciwieństwie do masowych trackerów, ta aplikacja działa w sposób wysoce
 
 ---
 
+## 📑 Spis Treści
+
+- [Dlaczego to stworzyłem? 💡](#dlaczego-to-stworzyłem)
+- [Dla kogo jest ten projekt? 🤔](#dla-kogo-jest-ten-projekt)
+- [Tech Stack 🛠️](#tech-stack)
+- [🚀 Szybki Start](#szybki-start)
+  - [1. Sklonuj repozytorium](#1-sklonuj-repozytorium)
+  - [2. Skonfiguruj Discord Bota](#2-skonfiguruj-discord-bota)
+  - [3. Ustaw zmienne środowiskowe](#3-ustaw-zmienne-środowiskowe)
+  - [4. Podnieś bazę danych (Docker Compose)](#4-podnieś-bazę-danych-docker-compose)
+  - [5. Odpal aplikację](#5-odpal-aplikację)
+  - [Checklist przy kolejnym uruchomieniu](#checklist-przy-każdym-kolejnym-uruchomieniu)
+  - [Automatyzacja na Windows (opcjonalnie)](#automatyzacja-na-windows-opcjonalnie)
+- [Architektura Kanałów i Komendy 💻](#architektura-kanałów-i-komendy)
+- [Jak działa potok przetwarzania (Pipeline)? 🚀](#jak-działa-potok-przetwarzania-pipeline)
+- [🛠️ Problemy i ich rozwiązania (Troubleshooting)](#troubleshooting)
+- [📐 Decyzje architektoniczne](#decyzje-architektoniczne)
+- [Roadmapa 🗺️](#roadmapa)
+
+---
+
 ## Dlaczego to stworzyłem? 💡
 
 Chciałem kupować gry w najniższych możliwych cenach, ale nie chciało mi się za każdym razem ręcznie przeglądać kilku sklepów i porównywać ofert na Steam, GOG czy Epicu. Zamiast robić to samo w kółko, postanowiłem zbudować bota, który robi to za mnie – wystarczy raz podać ID gry i cenę docelową, a reszta dzieje się automatycznie w tle.
@@ -22,7 +43,7 @@ Chciałem kupować gry w najniższych możliwych cenach, ale nie chciało mi si�
 
 Projekt został stworzony dla graczy i entuzjastów automatyzacji, którzy chcą:
 
-- Kupować gry w absolutnie najniższych cenach, bez ciągłego manualnego sprawdzania portali łowców okazji.
+- Kupować gry w absolutnie najniższych cenach, bez ciągłego manualnego sprawdzania.
 - Mieć pełną kontrolę nad swoimi alertami bezpośrednio z poziomu dedykowanych kanałów tekstowych na własnym serwerze Discord.
 - Przechowywać czystą i ustrukturyzowaną historię cenową gier we własnej lokalnej bazie danych.
 
