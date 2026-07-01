@@ -12,34 +12,27 @@ W przeciwieństwie do masowych trackerów, ta aplikacja działa w sposób wysoce
 
 ---
 
-## 📑 Spis Treści
+## Spis Treści
 
-- [Dlaczego to stworzyłem? 💡](#dlaczego-to-stworzyłem)
-- [Dla kogo jest ten projekt? 🤔](#dla-kogo-jest-ten-projekt)
-- [Tech Stack 🛠️](#tech-stack)
-- [🚀 Szybki Start](#szybki-start)
-  - [1. Sklonuj repozytorium](#1-sklonuj-repozytorium)
-  - [2. Skonfiguruj Discord Bota](#2-skonfiguruj-discord-bota)
-  - [3. Ustaw zmienne środowiskowe](#3-ustaw-zmienne-środowiskowe)
-  - [4. Podnieś bazę danych (Docker Compose)](#4-podnieś-bazę-danych-docker-compose)
-  - [5. Odpal aplikację](#5-odpal-aplikację)
-  - [Checklist przy kolejnym uruchomieniu](#checklist-przy-każdym-kolejnym-uruchomieniu)
-  - [Automatyzacja na Windows (opcjonalnie)](#automatyzacja-na-windows-opcjonalnie)
-- [Architektura Kanałów i Komendy 💻](#architektura-kanałów-i-komendy)
-- [Jak działa potok przetwarzania (Pipeline)? 🚀](#jak-działa-potok-przetwarzania-pipeline)
-- [🛠️ Problemy i ich rozwiązania (Troubleshooting)](#troubleshooting)
-- [📐 Decyzje architektoniczne](#decyzje-architektoniczne)
-- [Roadmapa 🗺️](#roadmapa)
+📌 [Dlaczego to stworzyłem](#dlaczego-to-stworzyłem) &nbsp;•&nbsp;
+[Dla kogo jest ten projekt](#dla-kogo-jest-ten-projekt) &nbsp;•&nbsp;
+[Tech Stack](#tech-stack) &nbsp;•&nbsp;
+[Szybki Start](#szybki-start) &nbsp;•&nbsp;
+[Architektura Kanałów i Komendy](#architektura-kanałów-i-komendy) &nbsp;•&nbsp;
+[Pipeline](#jak-działa-potok-przetwarzania) &nbsp;•&nbsp;
+[Troubleshooting](#troubleshooting) &nbsp;•&nbsp;
+[Decyzje architektoniczne](#decyzje-architektoniczne) &nbsp;•&nbsp;
+[Roadmapa](#roadmapa)
 
 ---
 
-## Dlaczego to stworzyłem? 💡
+## Dlaczego to stworzyłem
 
 Chciałem kupować gry w najniższych możliwych cenach, ale nie chciało mi się za każdym razem ręcznie przeglądać kilku sklepów i porównywać ofert na Steam, GOG czy Epicu. Zamiast robić to samo w kółko, postanowiłem zbudować bota, który robi to za mnie – wystarczy raz podać ID gry i cenę docelową, a reszta dzieje się automatycznie w tle.
 
 ---
 
-## Dla kogo jest ten projekt? 🤔
+## Dla kogo jest ten projekt
 
 Projekt został stworzony dla graczy i entuzjastów automatyzacji, którzy chcą:
 
@@ -49,7 +42,7 @@ Projekt został stworzony dla graczy i entuzjastów automatyzacji, którzy chcą
 
 ---
 
-## Tech Stack 🛠️
+## Tech Stack
 
 - **Backend:** `Go (Golang)` – zapewniający błyskawiczne działanie goroutine skanujących rynek.
 - **Baza Danych:** `PostgreSQL` – relacyjna baza danych zaprojektowana zgodnie z regułami BCNF, z pełną historią zmian cen gier (`game_price_history`).
@@ -60,18 +53,18 @@ Projekt został stworzony dla graczy i entuzjastów automatyzacji, którzy chcą
 
 ---
 
-## 🚀 Szybki Start
+## Szybki Start
 
 Poniższa sekcja to **jedyne miejsce**, którego potrzebujesz, żeby uruchomić projekt od zera. Wszystkie kolejne sekcje (troubleshooting, decyzje architektoniczne) są materiałem uzupełniającym.
 
-### 1. Sklonuj repozytorium
+### Sklonuj repozytorium
 
 ```bash
 git clone <adres_repozytorium>
 cd <nazwa_folderu_projektu>
 ```
 
-### 2. Skonfiguruj Discord Bota
+### Skonfiguruj Discord Bota
 
 1. Przejdź do [Discord Developer Portal](https://discord.com/developers/applications) i stwórz nową aplikację.
 2. W sekcji **Bot** wygeneruj token dostępowy.
@@ -79,7 +72,7 @@ cd <nazwa_folderu_projektu>
 4. W **OAuth2 → URL Generator** zaznacz `bot` + `applications.commands`, a w uprawnieniach bota: `Send Messages`, `Read Message History`, `View Channels`.
 5. Zaproś bota na serwer i stwórz kanały: `sprawdz-gre`, `alerty`, `lista_alertow`.
 
-### 3. Ustaw zmienne środowiskowe
+### Ustaw zmienne środowiskowe
 
 Skopiuj szablon zmiennych środowiskowych i utwórz własny plik `.env` (który jest bezpiecznie wykluczony z systemu Git przez `.gitignore`):
 
@@ -97,7 +90,7 @@ DB_PASSWORD=Twoje_Super_Bezpieczne_Haslo_123
 DB_NAME=steam_api_prod
 ```
 
-### 4. Podnieś bazę danych (Docker Compose)
+### Podnieś bazę danych
 
 Nie musisz ręcznie instalować PostgreSQL ani wpisywać długich komend dockerowych. W katalogu głównym projektu, tam gdzie znajduje się plik `docker-compose.yml`, wpisz w terminalu WSL:
 
@@ -107,20 +100,21 @@ docker compose up -d
 
 Docker automatycznie przeczyta dane z Twojego pliku `.env`, pobierze oficjalny obraz `postgres:15-alpine`, założy bazę danych oraz podepnie trwały wolumen, dzięki czemu nie stracisz danych po restarcie kontenera.
 
-### 5. Odpal aplikację
+### Odpal aplikację
 
 ```bash
 go run cmd/app/main.go
 ```
 
-### ✅ Checklist przy każdym kolejnym uruchomieniu
+### Checklist przy kolejnym uruchomieniu
 
 Przed każdym kolejnym uruchomieniem bota (np. po restarcie komputera) upewnij się, że Twoja baza danych w Dockerze żyje:
 
 - Sprawdź status kontenerów: `docker ps -a`
 - Jeśli baza ma status `Exited`, podnieś ją jedną komendą: `docker start steam_api_db`
 - Uruchom bota: `go run cmd/app/main.go` (lub kliknij dwukrotnie w plik `.bat` na pulpicie)
-### 💡 Automatyzacja na Windows (opcjonalnie)
+
+### Automatyzacja na Windows
 
 Stwórz plik `odpal_bota.bat` na pulpicie z zawartością:
 
@@ -132,7 +126,7 @@ Dwuklik = pełny skan cen bez otwierania terminala ręcznie.
 
 ---
 
-## Architektura Kanałów i Komendy 💻
+## Architektura Kanałów i Komendy
 
 ### `#sprawdz-gre` — wyszukiwarka
 - **Wpisanie nazwy gry** (np. `Cyberpunk`) → bot zwraca do 3 najlepszych dopasowań z ceną, sklepem i unikalnym **ID Gry** (potrzebnym do alertu).
@@ -146,7 +140,7 @@ Dwuklik = pełny skan cen bez otwierania terminala ręcznie.
 
 ---
 
-## Jak działa potok przetwarzania (Pipeline)? 🚀
+## Jak działa potok przetwarzania
 
 1. Po starcie (`go run cmd/app/main.go`) bot loguje się do Discorda.
 2. Równolegle odpala się asynchroniczna **Goroutine**.
@@ -155,7 +149,7 @@ Dwuklik = pełny skan cen bez otwierania terminala ręcznie.
 5. Gdy cena spadnie do progu — bot wysyła `SNIPER SHOT!` z tagiem, linkiem do koszyka i dezaktywuje alert.
 
 ---
-
+<a name="troubleshooting"></a>
 <details>
 <summary>🛠️ Problemy i ich rozwiązania (Troubleshooting)</summary>
 
@@ -179,8 +173,9 @@ if len(parts) != 3 {
 
 </details>
 
+<a name="decyzje-architektoniczne"></a>
 <details>
-<summary>📐 Decyzje architektoniczne</summary>
+<summary>Decyzje architektoniczne</summary>
 
 ### On-Demand zamiast `time.Ticker`
 Świadoma rezygnacja z pętli 24/7 na rzecz jednorazowego przebiegu przy starcie:
@@ -192,14 +187,14 @@ if len(parts) != 3 {
 - Zgodność z 3NF/BCNF dla `game_price_history`.
 - Szybki reset/backup jedną komendą.
 
-### Discord jako jedyny front
+### Discord 
 - `#sprawdz-gre` → wyszukiwanie bez zapisu.
 - `#alerty` → zapis/aktualizacja (Upsert).
 - `#lista_alertow` → odczyt i Soft Delete.
 
 </details>
 
-## Roadmapa 🗺️
+## Roadmapa
 
 Projekt jest aktywnie rozwijany. Poniżej lista funkcji, które planuję dodać w kolejnych iteracjach:
 
