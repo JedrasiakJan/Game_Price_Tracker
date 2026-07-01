@@ -4,7 +4,6 @@
 auth.json
 
 # --- Kompilaty i pliki wykonywalne Go ---
-# Wykluczamy pliki binarne, które tworzy kompilator
 *.exe
 *.exe~
 *.dll
@@ -12,17 +11,13 @@ auth.json
 *.dylib
 *.test
 *.out
-# Wykluczamy skompilowaną aplikację (jeśli nazwiesz ją 'app' lub 'main')
-app
-main
+main          # <--- DOPISZ TO TUTAJ. Ignoruje czystą binarkę Linuxową, kod w main.go zostaje bezpieczny!
+app           # (Opcjonalnie, jeśli budujesz binarkę komendą: go build -o app)
 
 # --- Narzędzia deweloperskie / IDE ---
-# Cursor / VS Code
 .vscode/
 *.code-workspace
 .history/
-
-# JetBrains (jeśli kiedyś użyjesz GoLand)
 .idea/
 
 # --- Systemowe ---

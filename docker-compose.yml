@@ -6,9 +6,9 @@ services:
     container_name: steam_api_db
     environment:
       # Dane administratora bazy - Docker użyje ich do zainicjowania bazy
-      POSTGRES_USER: steam_admin
-      POSTGRES_PASSWORD: steam_secure_password123
-      POSTGRES_DB: steam_api_prod
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:

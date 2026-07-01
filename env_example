@@ -1,0 +1,21 @@
+# ==============================================================================
+# Steam Price Tracker - Szablon Zmiennych Środowiskowych (.env.example)
+# ==============================================================================
+# Instrukcja: Skopiuj ten plik na swojej maszynie, zmień jego nazwę na `.env`
+# i uzupełnij go własnymi, tajnymi danymi. Plik `.env` jest ignorowany przez Git!
+
+# --- SEKRETY DISCORDA ---
+# Główny token uwierzytelniający Twojego bota z Discord Developer Portal
+DISCORD_TOKEN=your_discord_bot_token_here
+
+# --- KONFIGURACJA BAZY DANYCH (POSTGRESQL / DOCKER COMPOSE) ---
+# Te dane zostaną automatycznie wstrzyknięte do pliku docker-compose.yml 
+# podczas podnoszenia kontenera bazy danych za pomocą `docker compose up -d`.
+DB_USER=steam_admin
+DB_PASSWORD=your_secure_password_123_here
+DB_NAME=steam_api_prod
+
+# --- PARAMETRY DOTYCZĄCE POŁĄCZENIA ---
+# Przydatne, jeśli w przyszłości będziesz chciał sparametryzować connection string w initDB
+DB_HOST=localhost
+DB_PORT=5432

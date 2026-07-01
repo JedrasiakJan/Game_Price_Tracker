@@ -31,21 +31,25 @@ func createTables(db *sql.DB) {
 				platform VARCHAR(50) NOT NULL,
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);`,
+		`CREATE TABLE IF NOT EXISTS games (
+				game_id VARCHAR(100) PRIMARY KEY,
+				title VARCHAR(255) NOT NULL,
+				normal_price_usd NUMERIC(10, 2) NOT NULL,
+				store_id VARCHAR(50) NOT NULL
+		);`,
 		`CREATE TABLE IF NOT EXISTS alerts (
 				id SERIAL PRIMARY KEY,
 				user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-				game_id VARCHAR(100) NOT NULL,
-				game_name VARCHAR(255) NOT NULL,
+				game_id VARCHAR(100) NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
 				price_drop NUMERIC(10, 2) NOT NULL,
 				is_active BOOLEAN DEFAULT TRUE,
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);`,
 		`CREATE TABLE IF NOT EXISTS game_price_history (
 				id SERIAL PRIMARY KEY,
-				game_id VARCHAR(100) NOT NULL,
-				price_usd NUMERIC(10, 2) NOT NULL,
+				game_id VARCHAR(100) NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+				sale_price_usd NUMERIC(10, 2) NOT NULL,
 				timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-		
 		);`,
 	}
 	for _, query := range queries {

@@ -2,8 +2,10 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -18,6 +20,19 @@ type CheapSharkDeal struct {
 	SalePrice   string `json:"salePrice"` /* cheapshark zwraca cene jako string !!! */
 	NormalPrice string `json:"normalPrice"`
 	StoreID     string `json:"storeID"`
+	DealID      string `json:"dealID"`
+}
+
+type CheapSharkGameResponse struct {
+	Info struct {
+		Title string `json:"title"`
+	} `json:"info"`
+	Deals []struct {
+		StoreID     string `json:"storeID"`
+		Price       string `json:"price"`
+		RetailPrice string `json:"retailPrice"`
+		DealID      string `json:"dealID"`
+	} `json:"deals"`
 }
 
 func NewCheapSharkClient() *CheapSharkClient {
@@ -65,4 +80,59 @@ func (d CheapSharkDeal) GetPlatformName() string {
 	default:
 		return "Other"
 	}
+}
+
+// SearchGameByTitle szuka gier w API po nazwie wpisanej przez użytkownika
+func (c *CheapSharkClient) SearchGameByTitle(title string) ([]CheapSharkDeal, error) {
+	fullurl := fmt.Sprintf("%s/deals?title=%s", c.baseURL, url.QueryEscape(title))
+	resp, err := c.httpClient.Get(fullurl)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []CheapSharkDeal
+	err = json.Unmarshal(body, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+func (c *CheapSharkClient) FetchDealsForGame(gameID string) ([]CheapSharkDeal, error) {
+	fullurl := fmt.Sprintf("%s/games?id=%s", c.baseURL, gameID)
+	resp, err := c.httpClient.Get(fullurl)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var data CheapSharkGameResponse
+	if err := json.Unmarshal(body, &data); err != nil {
+		return nil, err
+	}
+	var deals []CheapSharkDeal
+	for _, d := range data.Deals {
+		deals = append(deals, CheapSharkDeal{
+			GameID:      gameID,
+			Title:       data.Info.Title,
+			SalePrice:   d.Price,
+			NormalPrice: d.RetailPrice,
+			StoreID:     d.StoreID,
+			DealID:      d.DealID,
+		})
+	}
+
+	return deals, nil
 }
